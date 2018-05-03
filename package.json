@@ -1,0 +1,15 @@
+{
+  "name": "ar-signage-v2-client",
+  "version": "1.0.0",
+  "description": "Flexible MQTT-Based Digital Signage for Escape Rooms",
+  "main": "index.js",
+  "repository": "https://github.com/hexcodech/ar-signage-v2-client",
+  "author": "Marc Berchtold <me@echolot.io>",
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^2.0.0"
+  }
+}
