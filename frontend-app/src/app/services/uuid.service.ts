@@ -14,8 +14,7 @@ export class UuidService {
   }
 
   private fetchUUID() {
-    this.uuidModule = this.electronService.remote.require('./modules/uuid.js');
-    this.uuidModule = new this.uuidModule();
+    this.uuidModule = new (this.electronService.remote.require('./modules/uuid.js'))();
     this.uuid = this.uuidModule.getUUID();
   }
 
