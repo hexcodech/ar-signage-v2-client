@@ -1,3 +1,11 @@
-<p>
-  flip-clock works!
-</p>
+<div class="clock">
+  <div class="minutes">
+    <app-flip-clock-digit [value]="m1"></app-flip-clock-digit>
+    <app-flip-clock-digit [value]="m2"></app-flip-clock-digit>
+  </div>
+  :
+  <div class="seconds">
+    <app-flip-clock-digit [value]="s1"></app-flip-clock-digit>
+    <app-flip-clock-digit [value]="s2"></app-flip-clock-digit>
+  </div>
+</div>

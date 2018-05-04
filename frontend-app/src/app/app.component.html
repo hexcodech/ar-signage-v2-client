@@ -1,1 +1,3 @@
-<app-header *ngIf="headerVisible" [mediaType]="mediaType"></app-header>
+<app-header *ngIf="headerVisible">
+    <app-flip-clock *ngIf="mediaType" [timerSeconds]="timerSeconds"></app-flip-clock>
+</app-header>

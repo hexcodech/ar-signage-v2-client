@@ -1,0 +1,14 @@
+<div class="digit">
+  <div class="current">
+    <span>{{value === 9 ? 0 : value + 1}}</span>
+    <div class="flip current-top top">
+      {{value === 9 ? 0 : value + 1}}
+    </div>
+    <div class="flip next top">
+      {{value}}
+    </div>
+    <div class="flip next-bottom bottom">
+      {{value}}
+    </div>
+  </div>
+</div>

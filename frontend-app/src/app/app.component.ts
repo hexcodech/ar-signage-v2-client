@@ -11,6 +11,7 @@ import {MqttService} from './services/mqtt.service';
 export class AppComponent implements OnInit {
   public headerVisible = true;
   public mediaType: string = 'text';
+  public timerSeconds = 90;
 
   constructor(
     private electronService: ElectronService,
@@ -20,6 +21,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     console.log(`Client ${this.uuidService.uuid} starting...`);
+    setInterval(() => this.timerSeconds++, 1000);
     // TODO: Subscribe to mqtt topic named after uuid, apply topic messages to state variables
     // TODO: Announce client in client_discovery topic
   }

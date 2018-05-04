@@ -7,13 +7,15 @@ import {UuidService} from './services/uuid.service';
 import {MqttService} from './services/mqtt.service';
 import {HeaderComponent} from './header/header.component';
 import {FlipClockComponent} from './flip-clock/flip-clock.component';
+import {FlipClockDigitComponent} from './flip-clock/flip-clock-digit/flip-clock-digit.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    FlipClockComponent
+    FlipClockComponent,
+    FlipClockDigitComponent
   ],
   imports: [
     BrowserModule,

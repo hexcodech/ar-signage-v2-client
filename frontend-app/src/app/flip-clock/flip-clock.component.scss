@@ -1,0 +1,26 @@
+.clock {
+	display: flex;
+
+	align-items: center;
+	align-content: center;
+	flex-direction: row;
+	flex-wrap: nowrap;
+
+	text-align: center;
+	color: #fff;
+	margin: 0;
+
+	overflow: hidden;
+}
+
+.minutes {
+	display: flex;
+	flex-wrap: nowrap;
+	margin-right: 0.02em;
+}
+
+.seconds {
+	display: flex;
+	flex-wrap: nowrap;
+	margin-left: 0.04em;
+}
