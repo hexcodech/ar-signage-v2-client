@@ -3,19 +3,25 @@ import {NgModule} from '@angular/core';
 import {NgxElectronModule} from 'ngx-electron';
 
 import {AppComponent} from './app.component';
-import { UuidService } from './services/uuid.service';
+import {UuidService} from './services/uuid.service';
+import {MqttService} from './services/mqtt.service';
+import {HeaderComponent} from './header/header.component';
+import {FlipClockComponent} from './flip-clock/flip-clock.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HeaderComponent,
+    FlipClockComponent
   ],
   imports: [
     BrowserModule,
     NgxElectronModule,
   ],
   providers: [
-    UuidService
+    UuidService,
+    MqttService,
   ],
   bootstrap: [AppComponent]
 })

@@ -5,7 +5,6 @@ module.exports = class UUID {
     
     getUUID() {
         const networkInterfaces = os.networkInterfaces();
-        console.dir(networkInterfaces);
         if (networkInterfaces.Ethernet)
             return networkInterfaces.Ethernet[0].mac;
         else if (networkInterfaces.eth0)

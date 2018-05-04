@@ -1,8 +1,8 @@
 const mqtt = require('mqtt');
 
 module.exports = class MQTT {
-    constructor() {
-        this.mqttClient = mqtt.connect('mqtt://192.168.178.2');
+    constructor(uri) {
+        this.mqttClient = mqtt.connect(uri);
     }
 
     // We can probably leave all this stuff out and implement it directly using the remote functionality
