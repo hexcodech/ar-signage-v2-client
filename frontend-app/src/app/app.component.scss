@@ -1,0 +1,70 @@
+.layout {
+    display: flex;
+	flex-flow: column;
+
+	height: 100vh;
+
+	//font-family: "Roboto";
+	font-weight: normal;
+}
+
+.media {
+	width: 100%;
+	position: relative;
+
+	display: flex;
+	flex: 2;
+
+	align-items: center;
+	justify-content: center;
+
+	background-color: #000;
+	font-size: 8.5vw;
+
+	overflow: auto;
+}
+
+@media (min-width: 1200px) {
+	.media {
+		font-size: 7rem;
+	}
+}
+
+.text {
+	max-width: 66%;
+
+	text-align: center;
+	color: #fff;
+	font-size: 3rem;
+}
+
+.image {
+	position: absolute;
+
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+
+	background-repeat: no-repeat;
+	background-size: 100% auto;
+}
+
+.video {
+	position: absolute;
+
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+
+	overflow: hidden;
+}
+.video video {
+    display: block;
+
+	margin-left: auto;
+	margin-right: auto;
+
+    height: 100%;
+}

@@ -10,8 +10,10 @@ import {MqttService} from './services/mqtt.service';
 })
 export class AppComponent implements OnInit {
   public headerVisible = true;
-  public mediaType: string = 'text';
+  public mediaType = 'video';
   public timerSeconds = 0;
+  public mediaText = '';
+  public mediaUrl = 'https://www.w3schools.com/html/mov_bbb.mp4';
 
   constructor(
     private electronService: ElectronService,
@@ -21,10 +23,16 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     console.log(`Client ${this.uuidService.uuid} starting...`);
-    setInterval(() => this.timerSeconds++, 1000);
     // TODO: Subscribe to mqtt topic named after uuid, apply topic messages to state variables
     // TODO: Announce client in client_discovery topic
   }
 
+  videoOnEnded() {
+    // TODO: Announce videoTimeRemaining 0
+    // TODO: Clear mediaUrl & change mediaType to none
+  }
 
+  videoUpdateRemaining() {
+    // TODO: Announce videoTimeRemaining
+  }
 }
