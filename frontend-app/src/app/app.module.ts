@@ -1,4 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NgModule} from '@angular/core';
 import {NgxElectronModule} from 'ngx-electron';
 
@@ -20,6 +21,7 @@ import {FlipClockDigitComponent} from './flip-clock/flip-clock-digit/flip-clock-
   imports: [
     BrowserModule,
     NgxElectronModule,
+    BrowserAnimationsModule,
   ],
   providers: [
     UuidService,

@@ -11,7 +11,7 @@ import {MqttService} from './services/mqtt.service';
 export class AppComponent implements OnInit {
   public headerVisible = true;
   public mediaType: string = 'text';
-  public timerSeconds = 90;
+  public timerSeconds = 0;
 
   constructor(
     private electronService: ElectronService,

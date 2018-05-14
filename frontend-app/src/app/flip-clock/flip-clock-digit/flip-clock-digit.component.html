@@ -1,8 +1,8 @@
 <div class="digit">
-  <div class="current">
-    <span>{{value === 9 ? 0 : value + 1}}</span>
+  <div [@flipTop]="value" [@flipBottom]="value" class="current">
+    <span>{{value === 0 ? 9 : value - 1}}</span>
     <div class="flip current-top top">
-      {{value === 9 ? 0 : value + 1}}
+      {{value === 0 ? 9 : value - 1}}
     </div>
     <div class="flip next top">
       {{value}}
