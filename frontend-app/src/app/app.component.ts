@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ElectronService} from 'ngx-electron';
 import {UuidService} from './services/uuid.service';
 import {MqttService} from './services/mqtt.service';
@@ -8,7 +8,7 @@ import {MqttService} from './services/mqtt.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   public headerVisible = true;
   public mediaType = 'video';
   public timerSeconds = 0;
@@ -27,13 +27,26 @@ export class AppComponent implements OnInit {
     this.mqttService.connect()
     .then((ip) => {
       console.log(`Client connected to mqtt ${ip}`);
+      this.mqttService.mqttModule.on('message', (topic, message) => this.mqttMessageHandler(topic, message));
+      this.mqttService.mqttModule.subscribe(``); // TODO: How are the personal topics named?
+      this.mqttService.mqttModule.publish('/ar-signage/devicediscovery', JSON.stringify({
+        value: {
+          uuid: this.uuidService.uuid,
+          role: 'client',
+        }
+      }));
     })
     .catch((err) => {
       console.error(err);
     });
+  }
 
-    // TODO: Subscribe to mqtt topic named after uuid, apply topic messages to state variables
-    // TODO: Announce client in client_discovery topic
+  ngOnDestroy() {
+    this.mqttService.mqttModule.end();
+  }
+
+  mqttMessageHandler(topic, message) {
+    console.log(`MQTT Message on topic ${topic}: ${message.toString()}`);
   }
 
   videoOnEnded() {

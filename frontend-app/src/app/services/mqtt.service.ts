@@ -4,7 +4,7 @@ import {ElectronService} from 'ngx-electron';
 @Injectable()
 export class MqttService {
 
-  private mqttModule: any;
+  public mqttModule: any;
 
   constructor(private electronService: ElectronService) {}
 
