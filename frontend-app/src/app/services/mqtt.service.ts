@@ -6,21 +6,11 @@ export class MqttService {
 
   private mqttModule: any;
 
-  constructor(private electronService: ElectronService) {
-    if (this.electronService.isElectronApp) {
-      this.connect();
-    }
-  }
+  constructor(private electronService: ElectronService) {}
 
-  private connect() {
+  public connect() {
     this.mqttModule = new (this.electronService.remote.require('./modules/mqtt.js'))();
-    this.mqttModule.connect()
-    .then((data) => {
-      console.dir(data);
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+    return this.mqttModule.connect();
   }
 
 }

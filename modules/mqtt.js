@@ -21,9 +21,14 @@ module.exports = class MQTT {
                 }
 
                 scan.on('result', (data) => {
-                    resolve(data);
-                    // TODO: Connect to address found
-                    // this.mqttClient = mqtt.connect(uri);
+                    console.dir()
+                    this.mqttClient = mqtt.connect(`mqtt://${data.ip}`);
+                    this.mqttClient.on('connect', () => {
+                        resolve(data.ip);
+                    });
+                    this.mqttClient.on('error', (err) => {
+                        reject(`mqtt error: ${err}`);
+                    });
                     return;
                 });
 

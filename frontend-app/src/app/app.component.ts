@@ -23,13 +23,23 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     console.log(`Client ${this.uuidService.uuid} starting...`);
+
+    this.mqttService.connect()
+    .then((ip) => {
+      console.log(`Client connected to mqtt ${ip}`);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+
     // TODO: Subscribe to mqtt topic named after uuid, apply topic messages to state variables
     // TODO: Announce client in client_discovery topic
   }
 
   videoOnEnded() {
     // TODO: Announce videoTimeRemaining 0
-    // TODO: Clear mediaUrl & change mediaType to none
+    this.mediaType = 'none';
+    this.mediaUrl = '';
   }
 
   videoUpdateRemaining() {
