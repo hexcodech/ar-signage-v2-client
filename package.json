@@ -13,6 +13,8 @@
     "electron": "^2.0.0"
   },
   "dependencies": {
+    "evilscan": "^1.6.1",
+    "ip": "^1.1.5",
     "mqtt": "^2.17.0"
   }
 }

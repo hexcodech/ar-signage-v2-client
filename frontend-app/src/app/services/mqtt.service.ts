@@ -13,7 +13,14 @@ export class MqttService {
   }
 
   private connect() {
-    this.mqttModule = new (this.electronService.remote.require('./modules/mqtt.js'))('mqtt://192.168.178.2');
+    this.mqttModule = new (this.electronService.remote.require('./modules/mqtt.js'))();
+    this.mqttModule.connect()
+    .then((data) => {
+      console.dir(data);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
   }
 
 }
