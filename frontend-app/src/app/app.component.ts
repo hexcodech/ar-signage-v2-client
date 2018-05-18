@@ -14,6 +14,7 @@ export class AppComponent implements OnInit, OnDestroy {
   public timerSeconds = 0;
   public mediaText = '';
   public mediaUrl = 'https://www.w3schools.com/html/mov_bbb.mp4';
+  private roomName: string;
 
   constructor(
     private electronService: ElectronService,
@@ -57,18 +58,47 @@ export class AppComponent implements OnInit, OnDestroy {
 
     switch (topic) {
       case `ar-signage/client/${this.uuidService.uuid}/roomname`:
-        this.mqttService.mqttModule.subscribe(`ar-signage/${messageObject.value}/${this.uuidService.uuid}`);
+        // Unsubscribe if there is already a roomName set
+        if (this.roomName) {
+          this.mqttService.mqttModule.unsubscribe(`ar-signage/${this.roomName}/timer/seconds`);
+          this.mqttService.mqttModule.unsubscribe(`ar-signage/${this.roomName}/${this.uuidService.uuid}/#`);
+        }
+
+        // Set roomName and subscribe to all important topics
+        this.roomName = messageObject.value;
+        this.mqttService.mqttModule.subscribe(`ar-signage/${this.roomName}/timer/seconds`);
+        this.mqttService.mqttModule.subscribe(`ar-signage/${this.roomName}/${this.uuidService.uuid}/#`);
+        break;
+
+      case `ar-signage/${this.roomName}/timer/seconds`:
+        this.timerSeconds = messageObject.value;
+        break;
+      case `ar-signage/${this.roomName}/${this.uuidService.uuid}/media/text`:
+        this.mediaType = 'text';
+        this.mediaText = messageObject.value;
+        break;
+      case `ar-signage/${this.roomName}/${this.uuidService.uuid}/media/image`:
+        // let mediaId = messageObject.value;
+        this.mediaType = 'image';
+        // this.mediaUrl = ;
+        break;
+      case `ar-signage/${this.roomName}/${this.uuidService.uuid}/media/video`:
+        // let mediaId = messageObject.value;
+        this.mediaType = 'video';
+        // this.mediaUrl = ;
         break;
     }
   }
 
   videoOnEnded() {
-    // TODO: Announce videoTimeRemaining 0
+    this.mqttService.mqttModule.publish(`ar-signage/${this.roomName}/${this.uuidService.uuid}/media/video/remaining`, JSON.stringify({
+      value: 0
+    }));
     this.mediaType = 'none';
     this.mediaUrl = '';
   }
 
   videoUpdateRemaining() {
-    // TODO: Announce videoTimeRemaining
+    // TODO: Announce videoTimeRemaining, throttle it!
   }
 }
