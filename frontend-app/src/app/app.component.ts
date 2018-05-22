@@ -30,9 +30,9 @@ export class AppComponent implements OnInit, OnDestroy {
     this.mqttService.connect()
     .then((ip) => {
       console.log(`Client connected to mqtt ${ip}`);
-      this.mqttService.mqttModule.on('message', (topic, message) => this.mqttMessageHandler(topic, message)); // Register message handler
-      this.mqttService.mqttModule.subscribe(`ar-signage/client/${this.uuidService.uuid}/roomname`); // Subscribe to private client topic
-      this.mqttService.mqttModule.publish('ar-signage/devicediscovery', JSON.stringify({ // Publish uuid to devicediscovery topic
+      this.mqttService.mqttModule.mqttClient.on('message', (topic, message) => this.mqttMessageHandler(topic, message)); // Register message handler
+      this.mqttService.mqttModule.mqttClient.subscribe(`ar-signage/client/${this.uuidService.uuid}/roomname`); // Subscribe to private client topic
+      this.mqttService.mqttModule.mqttClient.publish('ar-signage/devicediscovery', JSON.stringify({ // Publish uuid to devicediscovery topic
         value: {
           uuid: this.uuidService.uuid,
           role: 'client',
@@ -45,7 +45,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.mqttService.mqttModule.end();
+    this.mqttService.mqttModule.mqttClient.end();
   }
 
   mqttMessageHandler(topic, message) {
@@ -62,14 +62,14 @@ export class AppComponent implements OnInit, OnDestroy {
       case `ar-signage/client/${this.uuidService.uuid}/roomname`:
         // Unsubscribe if there is already a roomName set
         if (this.roomName) {
-          this.mqttService.mqttModule.unsubscribe(`ar-signage/${this.roomName}/timer/seconds`);
-          this.mqttService.mqttModule.unsubscribe(`ar-signage/${this.roomName}/${this.uuidService.uuid}/#`);
+          this.mqttService.mqttModule.mqttClient.unsubscribe(`ar-signage/${this.roomName}/timer/seconds`);
+          this.mqttService.mqttModule.mqttClient.unsubscribe(`ar-signage/${this.roomName}/${this.uuidService.uuid}/#`);
         }
 
         // Set roomName and subscribe to all important topics
         this.roomName = messageObject.value;
-        this.mqttService.mqttModule.subscribe(`ar-signage/${this.roomName}/timer/seconds`);
-        this.mqttService.mqttModule.subscribe(`ar-signage/${this.roomName}/${this.uuidService.uuid}/#`);
+        this.mqttService.mqttModule.mqttClient.subscribe(`ar-signage/${this.roomName}/timer/seconds`);
+        this.mqttService.mqttModule.mqttClient.subscribe(`ar-signage/${this.roomName}/${this.uuidService.uuid}/#`);
         break;
       case `ar-signage/client/${this.uuidService.uuid}/mediacacheurl`:
         this.mediaCacheService.init(messageObject.value);
@@ -101,8 +101,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   videoOnEnded() {
     // Check if mqttModule is successfully created and therefore possesses the publish function
-    if (this.mqttService.mqttModule.publish) {
-      this.mqttService.mqttModule.publish(`ar-signage/${this.roomName}/${this.uuidService.uuid}/media/video/remaining`, JSON.stringify({
+    if (this.mqttService.mqttModule.mqttClient.publish) {
+      this.mqttService.mqttModule.mqttClient.publish(`ar-signage/${this.roomName}/${this.uuidService.uuid}/media/video/remaining`, JSON.stringify({
         value: 0
       }));
     }
