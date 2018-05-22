@@ -2,6 +2,7 @@ import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ElectronService} from 'ngx-electron';
 import {UuidService} from './services/uuid.service';
 import {MqttService} from './services/mqtt.service';
+import {MediaCacheService} from './services/media-cache.service';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +21,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private electronService: ElectronService,
     private uuidService: UuidService,
     private mqttService: MqttService,
+    private mediaCacheService: MediaCacheService,
   ) {}
 
   ngOnInit() {
@@ -69,31 +71,41 @@ export class AppComponent implements OnInit, OnDestroy {
         this.mqttService.mqttModule.subscribe(`ar-signage/${this.roomName}/timer/seconds`);
         this.mqttService.mqttModule.subscribe(`ar-signage/${this.roomName}/${this.uuidService.uuid}/#`);
         break;
-
+      case `ar-signage/client/${this.uuidService.uuid}/mediacacheurl`:
+        this.mediaCacheService.init(messageObject.value);
+        break;
       case `ar-signage/${this.roomName}/timer/seconds`:
         this.timerSeconds = messageObject.value;
+        break;
+      case `ar-signage/${this.roomName}/${this.uuidService.uuid}/media/none`:
+        this.mediaType = 'none';
         break;
       case `ar-signage/${this.roomName}/${this.uuidService.uuid}/media/text`:
         this.mediaType = 'text';
         this.mediaText = messageObject.value;
         break;
       case `ar-signage/${this.roomName}/${this.uuidService.uuid}/media/image`:
-        // let mediaId = messageObject.value;
-        this.mediaType = 'image';
-        // this.mediaUrl = ;
+        this.mediaCacheService.mediaCacheModule.getLink(messageObject.value).then((url) => {
+          this.mediaType = 'image';
+          this.mediaUrl = url;
+        }).catch((err) => console.error(err));
         break;
       case `ar-signage/${this.roomName}/${this.uuidService.uuid}/media/video`:
-        // let mediaId = messageObject.value;
-        this.mediaType = 'video';
-        // this.mediaUrl = ;
+        this.mediaCacheService.mediaCacheModule.getLink(messageObject.value).then((url) => {
+          this.mediaType = 'video';
+          this.mediaUrl = url;
+        }).catch((err) => console.error(err));
         break;
     }
   }
 
   videoOnEnded() {
-    this.mqttService.mqttModule.publish(`ar-signage/${this.roomName}/${this.uuidService.uuid}/media/video/remaining`, JSON.stringify({
-      value: 0
-    }));
+    // Check if mqttModule is successfully created and therefore possesses the publish function
+    if (this.mqttService.mqttModule.publish) {
+      this.mqttService.mqttModule.publish(`ar-signage/${this.roomName}/${this.uuidService.uuid}/media/video/remaining`, JSON.stringify({
+        value: 0
+      }));
+    }
     this.mediaType = 'none';
     this.mediaUrl = '';
   }

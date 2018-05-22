@@ -9,6 +9,7 @@ import {MqttService} from './services/mqtt.service';
 import {HeaderComponent} from './header/header.component';
 import {FlipClockComponent} from './flip-clock/flip-clock.component';
 import {FlipClockDigitComponent} from './flip-clock/flip-clock-digit/flip-clock-digit.component';
+import {MediaCacheService} from './services/media-cache.service';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import {FlipClockDigitComponent} from './flip-clock/flip-clock-digit/flip-clock-
   providers: [
     UuidService,
     MqttService,
+    MediaCacheService,
   ],
   bootstrap: [AppComponent]
 })
