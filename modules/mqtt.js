@@ -19,9 +19,10 @@ module.exports = class MQTT {
                     reject(`evilScanner error: ${err}`);
                     return;
                 }
+                let foundSuccess = false;
 
                 scan.on('result', (data) => {
-                    console.dir()
+                    foundSuccess = true;
                     this.mqttClient = mqtt.connect(`mqtt://${data.ip}`);
                     this.mqttClient.on('connect', () => {
                         resolve(data.ip);
@@ -38,8 +39,10 @@ module.exports = class MQTT {
                 })
 
                 scan.on('done', () => {
-                    reject(`evilScanner error: No suitable mqtt server found`);
-                    return;
+                    if (!foundSuccess) {
+                        reject(`evilScanner error: No suitable mqtt server found`);
+                        return;
+                    }
                 })
 
                 scan.run();

@@ -11,10 +11,10 @@ import {MediaCacheService} from './services/media-cache.service';
 })
 export class AppComponent implements OnInit, OnDestroy {
   public headerVisible = true;
-  public mediaType = 'video';
+  public mediaType = 'none';
   public timerSeconds = 0;
   public mediaText = '';
-  public mediaUrl = 'https://www.w3schools.com/html/mov_bbb.mp4';
+  public mediaUrl = '';
   private roomName: string;
 
   constructor(

@@ -5,12 +5,12 @@ module.exports = class UUID {
     
     getMainNetworkInterface() {
         const networkInterfaces = os.networkInterfaces();
-        if (networkInterfaces.Ethernet[1])
+        if (networkInterfaces.Ethernet)
             return networkInterfaces.Ethernet[1];
-        else if (networkInterfaces.eth0[1])
-            return networkInterfaces.eth0[1];
-        else if (networkInterfaces.en0[1])
+        else if (networkInterfaces.en0)
             return networkInterfaces.en0[1];
+        else if (networkInterfaces.eth0)
+            return networkInterfaces.eth0[1];
         else if (networkInterfaces[0][1])
             return networkInterfaces[0][1];
         else
