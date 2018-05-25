@@ -9,13 +9,16 @@
         <div *ngIf="mediaType === 'text'" class="text">{{mediaText}}</div>
         <div *ngIf="mediaType === 'image'" class="image" [style.background-color]="mediaUrl"></div>
         <div *ngIf="mediaType === 'video'" class="video">
-            <video 
+            <video #video
             autoplay
             (ended)="videoOnEnded()"
-            (timeupdate)="videoUpdateRemaining()"
+            (timeupdate)="mediaTimeThrottler()"
             [src]="mediaUrl"
             ></video>
         </div>
+
+        <audio #backgroundAudio autoplay loop [src]="backgroundAudioUrl" [volume]="backgroundAudioVolume"></audio>
+        <audio #oneshotAudio autoplay [src]="oneshotAudioUrl"></audio>
     </div>
 
 </div>
