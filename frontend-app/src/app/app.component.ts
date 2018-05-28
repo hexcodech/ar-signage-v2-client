@@ -58,7 +58,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   mqttMessageHandler(topic, message) {
-    console.log(`MQTT Message on topic ${topic}: ${message.toString()}`);
     let messageObject;
     try {
       messageObject = JSON.parse(message.toString());
@@ -160,10 +159,10 @@ export class AppComponent implements OnInit, OnDestroy {
     if (this.mqttService.mqttModule.mqttClient) {
       this.mqttService.mqttModule.mqttClient.publish(`ar-signage/${this.roomName}/${this.uuidService.uuid}/media/video/currenttime`, JSON.stringify({
         value: 0
-      }));
+      }), {retain: true});
       this.mqttService.mqttModule.mqttClient.publish(`ar-signage/${this.roomName}/${this.uuidService.uuid}/media/none`, JSON.stringify({
         value: null
-      }));
+      }), {retain: true});
     }
     this.mediaType = 'none';
     this.mediaUrl = '';
@@ -173,7 +172,7 @@ export class AppComponent implements OnInit, OnDestroy {
     if (this.mqttService.mqttModule.mqttClient && this.videoElement) {
       this.mqttService.mqttModule.mqttClient.publish(`ar-signage/${this.roomName}/${this.uuidService.uuid}/media/video/currenttime`, JSON.stringify({
         value: this.videoElement.nativeElement.currentTime
-      }));
+      }), {retain: true});
     }
   }
 
