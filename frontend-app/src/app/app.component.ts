@@ -89,9 +89,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
       case `ar-signage/${this.roomName}/${this.uuidService.uuid}/media/none`:
         this.mediaType = 'none';
+        this.mediaUrl = '';
         break;
       case `ar-signage/${this.roomName}/${this.uuidService.uuid}/media/text`:
         this.mediaType = 'text';
+        this.mediaUrl = '';
         this.mediaText = messageObject.value;
         break;
       case `ar-signage/${this.roomName}/${this.uuidService.uuid}/media/image`:
@@ -159,19 +161,20 @@ export class AppComponent implements OnInit, OnDestroy {
       this.mqttService.mqttModule.mqttClient.publish(`ar-signage/${this.roomName}/${this.uuidService.uuid}/media/video/currenttime`, JSON.stringify({
         value: 0
       }));
+      this.mqttService.mqttModule.mqttClient.publish(`ar-signage/${this.roomName}/${this.uuidService.uuid}/media/none`, JSON.stringify({
+        value: null
+      }));
     }
     this.mediaType = 'none';
     this.mediaUrl = '';
   }
 
   videoUpdateRemaining() {
-    console.log(this.videoElement.nativeElement.currentTime);
-    if (this.mqttService.mqttModule.mqttClient) {
+    if (this.mqttService.mqttModule.mqttClient && this.videoElement) {
       this.mqttService.mqttModule.mqttClient.publish(`ar-signage/${this.roomName}/${this.uuidService.uuid}/media/video/currenttime`, JSON.stringify({
         value: this.videoElement.nativeElement.currentTime
       }));
     }
-    // TODO: Announce videoTimeRemaining, throttle it!
   }
 
   private throttle(func, wait, options) {
