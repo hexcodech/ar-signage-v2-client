@@ -1,5 +1,4 @@
-import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
-import {ElectronService} from 'ngx-electron';
+import {Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef} from '@angular/core';
 import {UuidService} from './services/uuid.service';
 import {MqttService} from './services/mqtt.service';
 import {MediaCacheService} from './services/media-cache.service';
@@ -11,10 +10,10 @@ import {MediaCacheService} from './services/media-cache.service';
 })
 export class AppComponent implements OnInit, OnDestroy {
   public headerVisible = true;
-  public mediaType = 'video';
+  public mediaType = 'none';
   public timerSeconds = 0;
   public mediaText = '';
-  public mediaUrl = 'http://techslides.com/demos/sample-videos/small.mp4';
+  public mediaUrl = '';
   public mediaTimeThrottler = this.throttle(this.videoUpdateRemaining, 1000, {});
   public backgroundAudioUrl = '';
   public backgroundAudioVolume = 1.0;
@@ -26,19 +25,17 @@ export class AppComponent implements OnInit, OnDestroy {
   @ViewChild('oneshotAudio') oneshotAudioElement;
 
   constructor(
-    private electronService: ElectronService,
     private uuidService: UuidService,
     private mqttService: MqttService,
     private mediaCacheService: MediaCacheService,
+    private changeRef: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
     console.log(`Client ${this.uuidService.uuid} starting...`);
 
-    this.mqttService.connect()
-    .then((ip) => {
+    this.mqttService.mqttModuleObservable.subscribe(ip => {
       console.log(`Client connected to mqtt ${ip}`);
-      this.mqttService.mqttModule.mqttClient.on('message', (topic, message) => this.mqttMessageHandler(topic, message)); // Register message handler
       this.mqttService.mqttModule.mqttClient.subscribe(`ar-signage/client/${this.uuidService.uuid}/roomname`); // Subscribe to private client topic
       this.mqttService.mqttModule.mqttClient.subscribe(`ar-signage/client/${this.uuidService.uuid}/mediacacheurl`); // Subscribe to private media cache url topic
       this.mqttService.mqttModule.mqttClient.publish('ar-signage/devicediscovery', JSON.stringify({ // Publish uuid to devicediscovery topic
@@ -47,9 +44,11 @@ export class AppComponent implements OnInit, OnDestroy {
           role: 'client',
         }
       }));
-    })
-    .catch((err) => {
-      console.error(err);
+    });
+
+    this.mqttService.mqttMessageObservable.subscribe(message => {
+      this.mqttMessageHandler(message.topic, message.message);
+      this.changeRef.detectChanges();
     });
   }
 

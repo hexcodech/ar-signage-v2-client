@@ -1,16 +1,23 @@
-import {Injectable} from '@angular/core';
-import {ElectronService} from 'ngx-electron';
+import { Injectable } from '@angular/core';
+import { ElectronService } from 'ngx-electron';
+import { ReplaySubject, Subject } from '../../../node_modules/rxjs';
 
 @Injectable()
 export class MqttService {
 
   public mqttModule: any;
+  public mqttModuleObservable: ReplaySubject<any> = new ReplaySubject<any>(1);
+  public mqttMessageObservable: Subject<{topic: string, message: string}> = new Subject<{topic: string, message: string}>();
 
-  constructor(private electronService: ElectronService) {}
-
-  public connect() {
+  constructor(private electronService: ElectronService) {
     this.mqttModule = new (this.electronService.remote.require('./modules/mqtt.js'))();
-    return this.mqttModule.connect();
+    this.connect();
   }
 
+  private connect() {
+    this.mqttModule.setCallback((topic, message) => this.mqttMessageObservable.next({topic, message}));
+    this.mqttModule.connect().then(ip => {
+      this.mqttModuleObservable.next(ip);
+    }).catch(err => console.error(err));
+  }
 }
