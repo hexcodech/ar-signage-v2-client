@@ -85,27 +85,17 @@ export class AppComponent implements OnInit, OnDestroy {
         this.timerSeconds = messageObject.value;
         break;
 
-      case `ar-signage/${this.roomName}/${this.uuidService.uuid}/media/none`:
-        this.mediaType = 'none';
-        this.mediaUrl = '';
+      case `ar-signage/${this.roomName}/${this.uuidService.uuid}/media`:
+        this.mediaType = messageObject.value.type;
+        if (this.mediaType === 'text') {
+          this.mediaText = messageObject.value.content;
+        } else if (this.mediaType === 'image' || this.mediaType === 'video') {
+          this.mediaCacheService.mediaCacheModule.getLink(messageObject.value.content).then((url) => {
+            this.mediaUrl = url;
+          }).catch((err) => console.error(err));
+        }
         break;
-      case `ar-signage/${this.roomName}/${this.uuidService.uuid}/media/text`:
-        this.mediaType = 'text';
-        this.mediaUrl = '';
-        this.mediaText = messageObject.value;
-        break;
-      case `ar-signage/${this.roomName}/${this.uuidService.uuid}/media/image`:
-        this.mediaCacheService.mediaCacheModule.getLink(messageObject.value).then((url) => {
-          this.mediaType = 'image';
-          this.mediaUrl = url;
-        }).catch((err) => console.error(err));
-        break;
-      case `ar-signage/${this.roomName}/${this.uuidService.uuid}/media/video`:
-        this.mediaCacheService.mediaCacheModule.getLink(messageObject.value).then((url) => {
-          this.mediaType = 'video';
-          this.mediaUrl = url;
-        }).catch((err) => console.error(err));
-        break;
+
       case `ar-signage/${this.roomName}/${this.uuidService.uuid}/media/video/control`:
         switch (messageObject.value) {
           case `RESET`:

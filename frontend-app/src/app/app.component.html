@@ -1,11 +1,11 @@
 <div class="layout">
 
     <app-header *ngIf="headerVisible">
-        <app-flip-clock *ngIf="mediaType !== 'none'" [timerSeconds]="timerSeconds"></app-flip-clock>
+        <app-flip-clock *ngIf="mediaType !== 'timer'" [timerSeconds]="timerSeconds"></app-flip-clock>
     </app-header>
 
     <div class="media">
-        <app-flip-clock *ngIf="mediaType === 'none'" [timerSeconds]="timerSeconds"></app-flip-clock>
+        <app-flip-clock *ngIf="mediaType === 'timer'" [timerSeconds]="timerSeconds"></app-flip-clock>
         <div *ngIf="mediaType === 'text'" class="text">{{mediaText}}</div>
         <div *ngIf="mediaType === 'image'" class="image" [style.background-color]="mediaUrl"></div>
         <div *ngIf="mediaType === 'video'" class="video">
