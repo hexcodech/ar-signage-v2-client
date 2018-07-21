@@ -2,6 +2,7 @@ import {Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef} from '@angul
 import {UuidService} from './services/uuid.service';
 import {MqttService} from './services/mqtt.service';
 import {MediaCacheService} from './services/media-cache.service';
+import { DomSanitizer } from '../../node_modules/@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,8 @@ export class AppComponent implements OnInit, OnDestroy {
   public mediaType = 'none';
   public timerSeconds = 0;
   public mediaText = '';
-  public mediaUrl = '';
+  public mediaUrl: any = '';
+  public mediaImageUrl: any;
   public mediaTimeThrottler = this.throttle(this.videoUpdateRemaining, 1000, {});
   public backgroundAudioUrl = '';
   public backgroundAudioVolume = 1.0;
@@ -28,7 +30,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private uuidService: UuidService,
     private mqttService: MqttService,
     private mediaCacheService: MediaCacheService,
-    private changeRef: ChangeDetectorRef
+    private changeRef: ChangeDetectorRef,
+    private sanitizer: DomSanitizer,
   ) {}
 
   ngOnInit() {
@@ -91,7 +94,12 @@ export class AppComponent implements OnInit, OnDestroy {
           this.mediaText = messageObject.value.content;
         } else if (this.mediaType === 'image' || this.mediaType === 'video') {
           this.mediaCacheService.mediaCacheModule.getLink(messageObject.value.content).then((url) => {
-            this.mediaUrl = url;
+            if (this.mediaType === 'image') {
+              this.mediaImageUrl = this.sanitizer.bypassSecurityTrustStyle('url("' + url + '")');
+            } else {
+              this.mediaUrl = url;
+            }
+            this.changeRef.detectChanges();
           }).catch((err) => console.error(err));
         }
         break;
