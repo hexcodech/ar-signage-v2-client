@@ -11,7 +11,7 @@ app.on('ready', createWindow);
 function createWindow() {
     win = new BrowserWindow({width: 1600, height: 900, webPreferences:{webSecurity: false}});
 
-    win.loadURL(fs.existsSync('./frontend-app/dist/index.html') ? 
+    win.loadURL(fs.existsSync(path.join(__dirname, 'frontend-app/dist/index.html')) ? 
       url.format({
         pathname: path.join(__dirname, 'frontend-app/dist/index.html'),
         protocol: 'file:',
@@ -24,5 +24,6 @@ function createWindow() {
         slashes: true,
       })
     );
-    win.webContents.openDevTools();
+    if (!fs.existsSync(path.join(__dirname, 'frontend-app/dist/index.html')))
+      win.webContents.openDevTools();
 }
