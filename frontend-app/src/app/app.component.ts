@@ -109,7 +109,6 @@ export class AppComponent implements OnInit, OnDestroy {
           case `RESET`:
             this.videoElement.nativeElement.pause();
             this.videoElement.nativeElement.currentTime = 0;
-            this.videoElement.nativeElement.play();
             break;
           case `PAUSE`:
             this.videoElement.nativeElement.pause();
@@ -132,7 +131,6 @@ export class AppComponent implements OnInit, OnDestroy {
           case `RESET`:
             this.backgroundAudioElement.nativeElement.pause();
             this.backgroundAudioElement.nativeElement.currentTime = 0;
-            this.backgroundAudioElement.nativeElement.play();
             break;
           case `PAUSE`:
             this.backgroundAudioElement.nativeElement.pause();
@@ -161,19 +159,23 @@ export class AppComponent implements OnInit, OnDestroy {
       this.mqttService.mqttModule.mqttClient.publish(`ar-signage/${this.roomName}/${this.uuidService.uuid}/media/video/currenttime`, JSON.stringify({
         value: 0
       }), {retain: true});
-      this.mqttService.mqttModule.mqttClient.publish(`ar-signage/${this.roomName}/${this.uuidService.uuid}/media/none`, JSON.stringify({
-        value: null
+      this.mqttService.mqttModule.mqttClient.publish(`ar-signage/${this.roomName}/${this.uuidService.uuid}/media`, JSON.stringify({
+        value: {
+          type: 'timer',
+          content: null,
+        }
       }), {retain: true});
     }
-    this.mediaType = 'none';
-    this.mediaUrl = '';
   }
 
   videoUpdateRemaining() {
     if (this.mqttService.mqttModule.mqttClient && this.videoElement) {
       this.mqttService.mqttModule.mqttClient.publish(`ar-signage/${this.roomName}/${this.uuidService.uuid}/media/video/currenttime`, JSON.stringify({
-        value: this.videoElement.nativeElement.currentTime
-      }), {retain: true});
+        value: {
+          current: this.videoElement.nativeElement.currentTime,
+          total: this.videoElement.nativeElement.duration,
+        }
+      }));
     }
   }
 
