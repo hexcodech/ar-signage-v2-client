@@ -121,8 +121,10 @@ export class AppComponent implements OnInit, OnDestroy {
         break;
 
       case `ar-signage/${this.roomName}/${this.uuidService.uuid}/audio/background`:
+        this.backgroundAudioUrl = undefined;
         this.mediaCacheService.mediaCacheModule.getLink(messageObject.value).then((url) => {
           this.backgroundAudioUrl = url;
+          this.changeRef.detectChanges();
         }).catch((err) => console.error(err));
         break;
       case `ar-signage/${this.roomName}/${this.uuidService.uuid}/audio/background/control`:
@@ -144,8 +146,10 @@ export class AppComponent implements OnInit, OnDestroy {
         this.backgroundAudioVolume = messageObject.value;
         break;
       case `ar-signage/${this.roomName}/${this.uuidService.uuid}/audio/oneshot`:
+        this.oneshotAudioUrl = undefined;
         this.mediaCacheService.mediaCacheModule.getLink(messageObject.value).then((url) => {
           this.oneshotAudioUrl = url;
+          this.changeRef.detectChanges();
         }).catch((err) => console.error(err));
         break;
     }

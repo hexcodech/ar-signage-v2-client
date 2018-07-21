@@ -17,7 +17,7 @@ module.exports = class MediaCache {
             http.get(`${this.mediaCacheDownloadUrl}/${mediaId}`, (response) => {
                 response.pipe(file);
                 file.on('finish', () => {
-                    file.close(resolve);
+                    file.close(() => resolve());
                     return;
                 });
             }).on('error', (err) => {
@@ -33,7 +33,6 @@ module.exports = class MediaCache {
             fs.access(`${this.mediaCachePath}/${mediaId}`, (err) => {
                 if (err) { // File doesn't exist
                     this.downloadAndStore(mediaId).then(() => {
-                        console.log(`file://${this.mediaCachePath}/${mediaId}`);
                         resolve(`file://${this.mediaCachePath}/${mediaId}`);
                         return;
                     }).catch((err) => {
