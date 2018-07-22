@@ -80,6 +80,14 @@ export class AppComponent implements OnInit, OnDestroy {
         this.roomName = messageObject.value;
         this.mqttService.mqttModule.mqttClient.subscribe(`ar-signage/${this.roomName}/timer/seconds`);
         this.mqttService.mqttModule.mqttClient.subscribe(`ar-signage/${this.roomName}/${this.uuidService.uuid}/#`);
+
+        // Set alive interval
+        setInterval(() => {
+          this.mqttService.mqttModule.mqttClient.publish(
+            `ar-signage/${this.roomName}/${this.uuidService.uuid}/alive`, JSON.stringify({ // Publish uuid to devicediscovery topic
+            value: new Date().getTime()
+          }), {retain: true});
+        }, 1000);
         break;
       case `ar-signage/client/${this.uuidService.uuid}/mediacacheurl`:
         this.mediaCacheService.init(messageObject.value);
