@@ -1,5 +1,5 @@
 process.env.NODE_ENV = process.execPath.search('electron-prebuilt') === -1;
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, globalShortcut} = require('electron');
 const url = require('url');
 const path = require('path');
 const fs = require('fs');
@@ -26,4 +26,8 @@ function createWindow() {
     );
     if (!fs.existsSync(path.join(__dirname, 'frontend-app/dist/index.html')))
       win.webContents.openDevTools();
+
+    globalShortcut.register('CommandOrControl+Shift+I', () => {
+      win.webContents.openDevTools();
+    });
 }
