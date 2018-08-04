@@ -7,6 +7,10 @@ const fs = require('fs');
 let win;
 
 app.on('ready', createWindow);
+app.on('window-all-closed', () => {
+    app.quit()
+});
+
 
 function createWindow() {
     win = new BrowserWindow({width: 1600, height: 900, webPreferences:{webSecurity: false}});
@@ -29,5 +33,9 @@ function createWindow() {
 
     globalShortcut.register('CommandOrControl+Shift+I', () => {
       win.webContents.openDevTools();
+    });
+
+    win.on('closed', () => {
+      win = null
     });
 }
