@@ -14,6 +14,7 @@ app.on('window-all-closed', () => {
 
 function createWindow() {
     win = new BrowserWindow({width: 1600, height: 900, webPreferences:{webSecurity: false}});
+    win.setFullScreen(true);
 
     win.loadURL(fs.existsSync(path.join(__dirname, 'frontend-app/dist/index.html')) ? 
       url.format({
