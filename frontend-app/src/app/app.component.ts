@@ -98,6 +98,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
       case `ar-signage/${this.roomName}/${this.uuidService.uuid}/media`:
         this.mediaType = messageObject.value.type;
+        this.headerVisible = true;
         if (this.mediaType === 'text') {
           this.mediaText = messageObject.value.content;
         } else if (this.mediaType === 'image' || this.mediaType === 'video') {
@@ -106,6 +107,7 @@ export class AppComponent implements OnInit, OnDestroy {
               this.mediaImageUrl = this.sanitizer.bypassSecurityTrustStyle('url("' + url + '")');
             } else {
               this.mediaUrl = url;
+              this.headerVisible = false;
             }
             this.changeRef.detectChanges();
           }).catch((err) => console.error(err));
