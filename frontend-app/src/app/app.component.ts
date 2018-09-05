@@ -11,6 +11,7 @@ import { DomSanitizer } from '../../node_modules/@angular/platform-browser';
 })
 export class AppComponent implements OnInit, OnDestroy {
   public headerVisible = true;
+  public blank = false;
   public mediaType = 'none';
   public timerSeconds = 0;
   public mediaText = '';
@@ -88,6 +89,9 @@ export class AppComponent implements OnInit, OnDestroy {
             value: new Date().getTime()
           }), {retain: true});
         }, 1000);
+        break;
+      case `ar-signage/client/${this.uuidService.uuid}/blank`:
+        this.blank = messageObject.value;
         break;
       case `ar-signage/client/${this.uuidService.uuid}/mediacacheurl`:
         this.mediaCacheService.init(messageObject.value);

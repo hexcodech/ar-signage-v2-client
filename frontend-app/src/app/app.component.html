@@ -1,5 +1,7 @@
 <div class="layout">
 
+    <div class="blanker" *ngIf="blank"></div>
+
     <app-header *ngIf="headerVisible">
         <app-flip-clock *ngIf="mediaType !== 'timer'" [timerSeconds]="timerSeconds"></app-flip-clock>
     </app-header>
