@@ -42,6 +42,7 @@ export class AppComponent implements OnInit, OnDestroy {
       console.log(`Client connected to mqtt ${ip}`);
       this.mqttService.mqttModule.mqttClient.subscribe(`ar-signage/client/${this.uuidService.uuid}/roomname`); // Subscribe to private client topic
       this.mqttService.mqttModule.mqttClient.subscribe(`ar-signage/client/${this.uuidService.uuid}/mediacacheurl`); // Subscribe to private media cache url topic
+      this.mqttService.mqttModule.mqttClient.subscribe(`ar-signage/client/${this.uuidService.uuid}/blank`);
       this.mqttService.mqttModule.mqttClient.publish('ar-signage/devicediscovery', JSON.stringify({ // Publish uuid to devicediscovery topic
         value: {
           uuid: this.uuidService.uuid,
@@ -68,7 +69,6 @@ export class AppComponent implements OnInit, OnDestroy {
       console.error(`mqttMessageHandler JSON parse error: ${err.toString()}`);
       return;
     }
-
     switch (topic) {
       case `ar-signage/client/${this.uuidService.uuid}/roomname`:
         // Unsubscribe if there is already a roomName set

@@ -1,13 +1,13 @@
 <div class="layout">
 
-    <div class="blanker" *ngIf="blank"></div>
+    <!-- <div class="blanker" *ngIf="blank"></div> -->
 
-    <app-header *ngIf="headerVisible">
+    <app-header *ngIf="headerVisible && !blank">
         <app-flip-clock *ngIf="mediaType !== 'timer'" [timerSeconds]="timerSeconds"></app-flip-clock>
     </app-header>
 
     <div class="media">
-        <app-flip-clock *ngIf="mediaType === 'timer'" [timerSeconds]="timerSeconds"></app-flip-clock>
+        <app-flip-clock *ngIf="mediaType === 'timer' && !blank" [timerSeconds]="timerSeconds"></app-flip-clock>
         <div *ngIf="mediaType === 'text'" class="text">{{mediaText}}</div>
         <div *ngIf="mediaType === 'image'" class="image" [style.background-image]="mediaImageUrl"></div>
         <div *ngIf="mediaType === 'video'" class="video">
