@@ -1,5 +1,10 @@
+.bg-dark {
+    background-color: #222 !important;
+}
+
 .navbar {
     .navbar-brand {
+        padding: 1rem .5rem;
         img {
             width: 30vw;
         }

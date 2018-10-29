@@ -12,7 +12,7 @@ import { DomSanitizer } from '../../node_modules/@angular/platform-browser';
 export class AppComponent implements OnInit, OnDestroy {
   public headerVisible = true;
   public blank = false;
-  public mediaType = 'none';
+  public mediaType = 'timer';
   public timerSeconds = 0;
   public mediaText = '';
   public mediaUrl: any = '';
